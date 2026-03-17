@@ -47,22 +47,21 @@ export const LayoutTestimonialSection = () => {
               <Card className="bg-muted/50 dark:bg-card">
                 <CardContent className="pt-6 pb-0">
                   <div className="flex gap-1 pb-6">
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="size-4 fill-primary text-primary" />
+                    ))}
                   </div>
                   {`"${review.comment}"`}
                 </CardContent>
-
                 <CardHeader>
                   <div className="flex flex-row items-center gap-4">
                     <Avatar>
                       <AvatarImage src={review.image} alt={review.name} />
-                      <AvatarFallback>SV</AvatarFallback>
+                      <AvatarFallback>
+                        {(review.name || "P")[0]}
+                        {(review.name.split(" ")[1] || "F")[0]}
+                      </AvatarFallback>
                     </Avatar>
-
                     <div className="flex flex-col">
                       <CardTitle className="text-lg">{review.name}</CardTitle>
                       <CardDescription>{review.role}</CardDescription>
