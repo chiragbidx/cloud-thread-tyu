@@ -11,11 +11,7 @@ import { db } from "@/lib/db/client";
 import { teams, teamMembers, users } from "@/lib/db/schema";
 import { sendEmail } from "@/lib/email/sendgrid";
 
-// Replication pattern for server actions in this codebase:
-// 1) Validate FormData with Zod.
-// 2) Return serializable error state for recoverable issues.
-// 3) Run DB/auth side effects only after validation passes.
-// 4) Redirect on successful terminal paths.
+// Server actions: sign in, sign up, resend verification.
 export type AuthActionState = {
   status: "idle" | "success" | "error";
   message: string;
@@ -41,7 +37,6 @@ const signUpSchema = z
   });
 
 function getSafeRedirect(formData: FormData): string {
-  // Prevent open-redirects by allowing only internal paths.
   const raw = formData.get("redirectTo");
   if (typeof raw === "string" && raw.startsWith("/")) return raw;
   return "/dashboard";
@@ -51,7 +46,6 @@ export async function signInWithPassword(
   _prevState: AuthActionState,
   formData: FormData
 ): Promise<AuthActionState> {
-  // Step 1: validate request payload.
   const parsed = signInSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -65,7 +59,6 @@ export async function signInWithPassword(
   }
 
   const email = parsed.data.email.toLowerCase();
-  // Step 2: look up user and verify credentials.
   const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1);
   if (!user) {
     return { status: "error", message: "Invalid email or password." };
@@ -76,7 +69,6 @@ export async function signInWithPassword(
     return { status: "error", message: "Invalid email or password." };
   }
 
-  // Step 3: enforce email verification before allowing login.
   if (!user.emailVerified) {
     const baseUrl = process.env.BASE_URL ?? "http://localhost:3000";
     const token = await generateAuthToken(user.id, "email_verification");
@@ -88,7 +80,7 @@ export async function signInWithPassword(
       "Verify your email address",
       `
       <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-        <h2>Verify your email</h2>
+        <h2>Verify your PayFlow account</h2>
         <p>Please verify your email address before signing in.</p>
         <p>
           <a href="${verifyUrl}" style="display: inline-block; padding: 10px 20px; background: #171717; color: #fff; text-decoration: none; border-radius: 6px;">
@@ -102,12 +94,11 @@ export async function signInWithPassword(
 
     return {
       status: "error",
-      message: "Please verify your email before signing in. A new verification link has been sent to your inbox.",
+      message: "Please verify your email before signing in. A verification link has been sent to your inbox.",
       _devUrl: verifyUrl,
     };
   }
 
-  // Step 4: create session + redirect (success path does not return state).
   await createAuthSession(user.id, user.email);
   redirect(getSafeRedirect(formData));
 }
@@ -116,7 +107,6 @@ export async function signUpWithPassword(
   _prevState: AuthActionState,
   formData: FormData
 ): Promise<AuthActionState> {
-  // Step 1: validate request payload.
   const parsed = signUpSchema.safeParse({
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
@@ -133,7 +123,6 @@ export async function signUpWithPassword(
   }
 
   const email = parsed.data.email.toLowerCase();
-  // Step 2: enforce unique email.
   const [existingUser] = await db
     .select({ id: users.id })
     .from(users)
@@ -147,7 +136,6 @@ export async function signUpWithPassword(
     };
   }
 
-  // Step 3: create user record.
   const passwordHash = await bcrypt.hash(parsed.data.password, 12);
 
   const [newUser] = await db.insert(users).values({
@@ -160,7 +148,6 @@ export async function signUpWithPassword(
   const redirectTo = getSafeRedirect(formData);
   const isInviteFlow = redirectTo.startsWith("/invite/");
 
-  // Step 4: non-invite signup auto-creates a personal team + owner membership.
   if (!isInviteFlow) {
     const teamName = `${parsed.data.firstName}'s Team`;
     const [newTeam] = await db.insert(teams).values({ name: teamName }).returning({ id: teams.id });
@@ -171,7 +158,6 @@ export async function signUpWithPassword(
     });
   }
 
-  // Step 5: send verification email.
   const baseUrl = process.env.BASE_URL ?? "http://localhost:3000";
   const verifyToken = await generateAuthToken(newUser.id, "email_verification");
   const verifyUrl = `${baseUrl}/auth/verify-email/${verifyToken}`;
@@ -179,10 +165,10 @@ export async function signUpWithPassword(
 
   await sendEmail(
     email,
-    "Verify your email address",
+    "Verify your PayFlow account",
     `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-      <h2>Welcome!</h2>
+      <h2>Welcome to PayFlow!</h2>
       <p>Please verify your email address to complete your account setup.</p>
       <p>
         <a href="${verifyUrl}" style="display: inline-block; padding: 10px 20px; background: #171717; color: #fff; text-decoration: none; border-radius: 6px;">
@@ -194,7 +180,6 @@ export async function signUpWithPassword(
     `
   );
 
-  // Step 6: do NOT auto-login — require email verification first.
   return {
     status: "success",
     message: "Account created! Please check your email and verify your address before signing in.",
@@ -231,10 +216,10 @@ export async function resendVerificationEmailAction(
 
   const result = await sendEmail(
     user.email,
-    "Verify your email address",
+    "Verify your PayFlow account",
     `
     <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-      <h2>Verify your email</h2>
+      <h2>Verify your PayFlow account</h2>
       <p>Click the button below to verify your email address.</p>
       <p>
         <a href="${verifyUrl}" style="display: inline-block; padding: 10px 20px; background: #171717; color: #fff; text-decoration: none; border-radius: 6px;">
