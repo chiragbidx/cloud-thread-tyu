@@ -45,11 +45,13 @@ export default async function DashboardLayout({
         <aside className="hidden w-[264px] shrink-0 border-r bg-card/50 md:flex md:flex-col">
           <div className="p-5">
             <div className="flex items-center gap-2.5">
-              <div className="grid size-8 place-items-center rounded-lg bg-foreground text-background text-sm font-bold shadow-sm">
-                P
-              </div>
+              <img
+                src="/payflow-logo.svg"
+                alt="PayFlow"
+                className="w-8 h-8 rounded"
+              />
               {/* Dashboard Text Logo */}
-              <span className="font-semibold tracking-tight">Panda</span>
+              <span className="font-semibold tracking-tight">PayFlow</span>
             </div>
           </div>
 
