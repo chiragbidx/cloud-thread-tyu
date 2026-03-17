@@ -22,7 +22,7 @@ export const LayoutHeroSection = () => {
           <div className="max-w-screen-md mx-auto text-center text-4xl md:text-6xl font-bold">
             <h1>
               {hero.titleBefore}
-              <span className="text-transparent px-2 bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text">
+              <span className="text-transparent px-2 bg-gradient-to-r from-[#6a4ae4] to-blue-500 bg-clip-text">
                 {hero.titleHighlight}
               </span>
               {hero.titleAfter}
@@ -58,18 +58,17 @@ export const LayoutHeroSection = () => {
           <Image
             width={1200}
             height={1200}
-            className="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-secondary border-t-primary/30 dark:hidden"
+            className="w-full md:w-[1200px] mx-auto rounded-lg relative leading-none flex items-center border border-t-2 border-secondary border-t-primary/30 dark:hidden"
             src={hero.heroImageLight}
             alt={hero.heroImageAlt}
           />
           <Image
             width={1200}
             height={1200}
-            className="hidden w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none border border-t-2 border-secondary border-t-primary/30 dark:block"
+            className="hidden w-full md:w-[1200px] mx-auto rounded-lg relative border border-t-2 border-secondary border-t-primary/30 dark:block"
             src={hero.heroImageDark}
             alt={hero.heroImageAlt}
           />
-
           <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-lg"></div>
         </div>
       </div>
