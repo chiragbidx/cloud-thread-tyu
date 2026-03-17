@@ -7,5 +7,5 @@
 -->
 
 2024-06-10
-- Fixed: Explicitly typed parameter for formSubjects in Contact section’s select box to resolve Next.js/TypeScript build error.
-- File updated: `components/home/LayoutContactSection.tsx`
+- Fixed: Added explicit type annotation for developer services items parameter to resolve TS build error.
+- File updated: `components/home/LayoutDeveloperSection.tsx`
