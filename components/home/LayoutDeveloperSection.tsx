@@ -4,6 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const { services } = getHomeContent();
 
+type ServiceItem = {
+  title: string;
+  description: string;
+  pro?: boolean;
+};
+
 export const LayoutDeveloperSection = () => {
   return (
     <section id="developer" className="container py-24 sm:py-32">
@@ -19,7 +25,7 @@ export const LayoutDeveloperSection = () => {
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 my-10">
-        {services.items.map((service) => (
+        {services.items.map((service: ServiceItem) => (
           <Card key={service.title} className={service.pro ? "border-primary border-[1.5px] shadow-md" : ""}>
             <CardHeader>
               <CardTitle>{service.title}</CardTitle>
