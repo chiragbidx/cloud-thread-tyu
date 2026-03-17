@@ -1,22 +1,16 @@
 // Server Component: keep layout/content server-rendered; sections are data-driven.
-import { LayoutBenefitsSection } from "../components/home/LayoutBenefitsSection";
-import { LayoutContactSection } from "../components/home/LayoutContactSection";
-import { LayoutFaqSection } from "../components/home/LayoutFaqSection";
-import { LayoutFeatureGridSection } from "../components/home/LayoutFeatureGridSection";
-import { LayoutFooterSection } from "../components/home/LayoutFooterSection";
 import { LayoutHeroSection } from "../components/home/LayoutHeroSection";
+import { LayoutFeaturesSection } from "../components/home/LayoutFeaturesSection";
+import { LayoutDeveloperSection } from "../components/home/LayoutDeveloperSection";
 import { LayoutPricingSection } from "../components/home/LayoutPricingSection";
-import { LayoutServicesSection } from "../components/home/LayoutServicesSection";
-import { LayoutSponsorsSection } from "../components/home/LayoutSponsorsSection";
-import { LayoutTeamSection } from "../components/home/LayoutTeamSection";
 import { LayoutTestimonialSection } from "../components/home/LayoutTestimonialSection";
+import { LayoutFooterSection } from "../components/home/LayoutFooterSection";
 import { Navbar as LayoutNavbar } from "@/components/layout/navbar";
 import { getAuthSession } from "@/lib/auth/session";
 
 export default async function Home() {
   const session = await getAuthSession();
-  // Simple toggles so agents/users can hide sections without touching JSX.
-  // Use ONLY_SECTIONS (comma list) to whitelist, or HIDE_SECTIONS to blacklist.
+  // Section control—see ONLY_SECTIONS/HIDE_SECTIONS env for runtime toggles.
   const only = (process.env.ONLY_SECTIONS ?? "")
     .split(",")
     .map((s) => s.trim().toLowerCase())
@@ -30,15 +24,10 @@ export default async function Home() {
   const hide = new Set(whitelist ? envHide : [...defaultHide, ...envHide]);
   const sections = [
     ["layout-hero", <LayoutHeroSection key="layout-hero" />],
-    ["layout-sponsors", <LayoutSponsorsSection key="layout-sponsors" />],
-    ["layout-benefits", <LayoutBenefitsSection key="layout-benefits" />],
-    ["layout-features", <LayoutFeatureGridSection key="layout-features" />],
-    ["layout-services", <LayoutServicesSection key="layout-services" />],
-    ["layout-testimonials", <LayoutTestimonialSection key="layout-testimonials" />],
-    ["layout-team", <LayoutTeamSection key="layout-team" />],
+    ["layout-features", <LayoutFeaturesSection key="layout-features" />],
+    ["layout-developer", <LayoutDeveloperSection key="layout-developer" />],
     ["layout-pricing", <LayoutPricingSection key="layout-pricing" />],
-    ["layout-contact", <LayoutContactSection key="layout-contact" />],
-    ["layout-faq", <LayoutFaqSection key="layout-faq" />],
+    ["layout-testimonials", <LayoutTestimonialSection key="layout-testimonials" />],
     ["layout-footer", <LayoutFooterSection key="layout-footer" />],
   ] as const;
   const visibleSections = sections
@@ -51,8 +40,6 @@ export default async function Home() {
       <main className="flex min-h-screen w-full flex-col gap-12 px-6 py-12 sm:px-10 lg:px-16 lg:max-w-[1600px] lg:mx-auto">
         {visibleSections.map(([, node]) => node)}
       </main>
-
-      {/* lightweight animations defined locally to avoid tailwind config changes */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
