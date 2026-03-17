@@ -7,5 +7,5 @@
 -->
 
 2024-06-10
-- Fixed: Explicitly typed destructured props for benefits items in `LayoutBenefitsSection` to resolve Next.js/TypeScript build error.
-- File updated: `components/home/LayoutBenefitsSection.tsx`
+- Fixed: Explicitly typed parameter for formSubjects in Contact section’s select box to resolve Next.js/TypeScript build error.
+- File updated: `components/home/LayoutContactSection.tsx`
