@@ -1,15 +1,6 @@
 import Client from "@/app/auth/client";
 
-// Purpose: Server route entry for /auth.
-// Keep request parsing and server-side checks here,
-// then pass prepared props into `client.tsx`.
-//
-// Replication pattern for new routes:
-// 1) Parse/normalize `searchParams` in this server file.
-// 2) Run server-only checks/data fetches here.
-// 3) Pass serializable props to a co-located `client.tsx`.
-// 4) Keep this file free of browser-only hooks/state.
-
+// Server route entry for /auth.
 type AuthPageProps = {
   searchParams?: Promise<{
     redirect?: string;
