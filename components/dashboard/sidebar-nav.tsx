@@ -6,10 +6,15 @@ import { usePathname } from "next/navigation";
 import {
   ChevronDown,
   Home,
-  Hammer,
-  Settings,
   Users,
-  CreditCard,
+  ShoppingCart,
+  ReceiptText,
+  DollarSign,
+  Repeat,
+  Key,
+  Server,
+  BarChart3,
+  Settings,
 } from "lucide-react";
 import {
   Collapsible,
@@ -26,21 +31,23 @@ type NavItem = {
 
 const sections: { title: string; items: NavItem[] }[] = [
   {
-    title: "Platform",
+    title: "PayFlow Platform",
     items: [
       { label: "Overview", href: "/dashboard", icon: Home },
-      {
-        label: "Feature",
-        href: "/dashboard/feature",
-        icon: Hammer,
-      },
+      { label: "Customers", href: "/dashboard/customers", icon: Users },
+      { label: "Products", href: "/dashboard/products", icon: ShoppingCart },
+      { label: "Payments", href: "/dashboard/payments", icon: DollarSign },
+      { label: "Invoices", href: "/dashboard/invoices", icon: ReceiptText },
+      { label: "Subscriptions", href: "/dashboard/subscriptions", icon: Repeat },
+      { label: "API Keys", href: "/dashboard/api-keys", icon: Key },
+      { label: "Webhooks", href: "/dashboard/webhooks", icon: Server },
+      { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
     ],
   },
   {
-    title: "Account",
+    title: "Account & Settings",
     items: [
       { label: "Team", href: "/dashboard/team", icon: Users },
-      { label: "Billing", href: "#", icon: CreditCard, disabled: true },
       { label: "Settings", href: "/dashboard/settings", icon: Settings },
     ],
   },
