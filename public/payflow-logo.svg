@@ -1,0 +1,10 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="48" height="48" rx="12" fill="url(#payflow-gradient)"/>
+  <path d="M14 34V14h11c4.5 0 7.5 2.13 7.5 6.16 0 3.09-2.49 5.09-5.82 5.29V26c3.91.23 6.32 2.38 6.32 5.73C33 33.1 29.94 34 26.34 34H14zm7.27-14.14H18.45v5.25h2.82c2.29 0 3.7-.97 3.7-2.68S23.73 19.86 21.27 19.86zM21.4 26.99h-2.95v5.53h3.11c2.16 0 3.46-.89 3.46-2.65 0-1.72-1.26-2.88-3.62-2.88z" fill="#fff"/>
+  <defs>
+    <linearGradient id="payflow-gradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6A4AE4"/>
+      <stop offset="1" stop-color="#4FB9F7"/>
+    </linearGradient>
+  </defs>
+</svg>
